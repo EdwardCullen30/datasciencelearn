@@ -1,6 +1,12 @@
 import pandas as pd
 import quandl
 import math
+import numpy as np
+from sklearn import preprocessing, svm
+from sklearn.model_selection import cross_validate
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+
 
 df = quandl.get("WIKI/GOOGL")
 df.columns = df.columns.to_series().apply(lambda x: x.strip())
@@ -14,4 +20,17 @@ forcast_out = int(math.ceil(0.01*len(df)))
 
 df['label'] = df[forcast_col].shift(-forcast_out)
 df.dropna(inplace=True)
-print(df.head())
+
+
+X = np.array(df.drop(['label'], 1))
+y = np.array(df['label'])
+
+X = preprocessing.scale(X)
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+clf = LinearRegression()
+clf.fit(X_train, y_train)
+acc = clf.score(X_test, y_test)
+
+print(acc)
