@@ -12,7 +12,7 @@ from matplotlib import style
 
 style.use('ggplot')
 
-
+quandl.ApiConfig.api_key = "dU5sFhqMBXDqDSRUyLcs"
 df = quandl.get("WIKI/GOOGL")
 df.columns = df.columns.to_series().apply(lambda x: x.strip())
 df = df[['Adj. Open', "Adj. High", "Adj. Low", "Adj. Close", "Adj. Volume", ]]
